@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harmonie — Ton espace pour aller mieux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --pink:    #D41574;
+      --pink2:   #DC2265;
+      --orange:  #FF611B;
+      --amber:   #FFA93D;
+      --bg:      #FFFBF7;
+      --text:    #1a1018;
+      --muted:   #7a6070;
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: "DM Sans", sans-serif; }
+    body { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+    .left { padding: 48px 40px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+    .left::before { content: ""; position: absolute; top: -80px; left: -80px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, #FF93C920 0%, transparent 70%); pointer-events: none; }
+    .left::after { content: ""; position: absolute; bottom: -60px; right: -40px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, #FFBF0018 0%, transparent 70%); pointer-events: none; }
+    .logo { font-family: "Syne", sans-serif; font-weight: 800; font-size: 22px; background: linear-gradient(90deg, var(--pink), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+    .logo-emoji { font-size: 22px; -webkit-text-fill-color: initial; }
+    .left-main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 40px 0; }
+    .tag { display: inline-flex; align-items: center; gap: 6px; background: #FFE8F4; color: var(--pink); font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 40px; width: fit-content; margin-bottom: 20px; }
+    .tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--pink); }
+    h1 { font-family: "Syne", sans-serif; font-weight: 800; font-size: clamp(28px, 3vw, 40px); line-height: 1.15; letter-spacing: -1px; color: var(--text); margin-bottom: 16px; }
+    h1 span { background: linear-gradient(90deg, var(--pink), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .desc { font-size: 15px; line-height: 1.7; color: var(--muted); max-width: 340px; margin-bottom: 32px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill { background: #fff; border: 1.5px solid #f0e0ec; border-radius: 40px; padding: 7px 14px; font-size: 13px; color: var(--muted); }
+    .left-footer { font-size: 12px; color: #bba8b5; line-height: 1.6; }
+    .left-footer a { color: var(--pink); text-decoration: none; }
+    .right { background: #fff; border-left: 1px solid #f0e6ee; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
+    .chat-header { padding: 20px 24px; border-bottom: 1px solid #f5eaf2; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .chat-avatar { width: 42px; height: 42px; border-radius: 50%; background: #fff5fb; border: 2px solid #f0d0e8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 22px; line-height: 1; }
+    .chat-header-info { flex: 1; }
+    .chat-header-name { font-family: "Syne", sans-serif; font-weight: 700; font-size: 14px; color: var(--text); }
+    .chat-header-status { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+    .chat-header-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #3bba6e; }
+    .progress-wrap { padding: 10px 24px 0; flex-shrink: 0; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+    .progress-label span:last-child { color: var(--pink); font-weight: 500; }
+    .progress-track { height: 5px; background: #f5eaf2; border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--pink), var(--amber)); transition: width 0.4s ease; }
+    .chat-msgs { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
+    .chat-msgs::-webkit-scrollbar { width: 3px; }
+    .chat-msgs::-webkit-scrollbar-thumb { background: #f0d0e8; border-radius: 2px; }
+    .msg { display: flex; gap: 8px; align-items: flex-end; max-width: 82%; }
+    .msg.user { flex-direction: row-reverse; margin-left: auto; }
+    .msg-av { width: 28px; height: 28px; border-radius: 50%; background: #fff5fb; border: 1.5px solid #f0d0e8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; line-height: 1; }
+    .bubble { padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.55; max-width: 100%; word-break: break-word; }
+    .msg.bot .bubble { background: #FFD085; border: 1px solid #f5c060; color: var(--text); border-bottom-left-radius: 4px; }
+    .msg.user .bubble { background: linear-gradient(135deg, var(--pink), var(--pink2)); color: #fff; border-bottom-right-radius: 4px; }
+    .typing { display: flex; gap: 4px; align-items: center; padding: 10px 14px; background: #FFD085; border: 1px solid #f5c060; border-radius: 16px; border-bottom-left-radius: 4px; width: fit-content; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #c08020; animation: pulse 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulse { 0%,60%,100%{opacity:0.3;transform:scale(1)} 30%{opacity:1;transform:scale(1.2)} }
+    .chat-footer { padding: 16px 24px 20px; border-top: 1px solid #f5eaf2; flex-shrink: 0; }
+    .input-row { display: flex; gap: 8px; align-items: flex-end; }
+    .chat-input { flex: 1; border: 1.5px solid #f0dded; border-radius: 22px; padding: 10px 16px; font-size: 14px; font-family: "DM Sans", sans-serif; resize: none; outline: none; background: #fdf8fc; color: var(--text); line-height: 1.4; max-height: 100px; transition: border-color 0.2s; }
+    .chat-input:focus { border-color: var(--pink); background: #fff; }
+    .chat-input::placeholder { color: #c0a8b8; }
+    .send-btn { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--orange)); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.2s, transform 0.1s; }
+    .send-btn:hover { opacity: 0.88; }
+    .send-btn:active { transform: scale(0.93); }
+    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .send-btn svg { width: 17px; height: 17px; fill: #fff; }
+    .limit-msg { background: #fff5fb; border: 1px solid #f4b8d8; border-radius: 12px; padding: 14px 16px; font-size: 13px; color: var(--pink); text-align: center; line-height: 1.6; }
+    .limit-msg strong { display: block; font-weight: 700; margin-bottom: 4px; font-size: 14px; }
+    .limit-msg a { color: var(--orange); font-weight: 500; text-decoration: none; }
+    @media (max-width: 700px) { body { grid-template-columns: 1fr; } .left { display: none; } .right { height: 100vh; border-left: none; } }
+  </style>
+</head>
+<body>
+
+<section class="left">
+  <div class="logo"><span class="logo-emoji">🦊</span> Harmonie</div>
+  <div class="left-main">
+    <div class="tag">Espace bien-être</div>
+    <h1>Tu mérites de te sentir <span>bien dans ta tête</span></h1>
+    <p class="desc">Je suis Harmonie, ta grande sœur bienveillante. Pas un médecin, pas un prof — juste quelqu'un qui t'écoute vraiment, sans jugement.</p>
+    <div class="pills">
+      <span class="pill">💬 Parle librement</span>
+      <span class="pill">🌿 Sans jugement</span>
+      <span class="pill">🔒 Confidentiel</span>
+    </div>
+  </div>
+  <div class="left-footer">
+    Harmonie est une IA bienveillante, pas un professionnel de santé.<br />
+    En cas d'urgence, contacte le <strong>3114</strong>.<br />
+    <a href="#">Mentions légales</a> · <a href="#">Politique de confidentialité</a>
+  </div>
+</section>
+
+<section class="right">
+  <div class="chat-header">
+    <div class="chat-avatar">🦊</div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">Harmonie</div>
+      <div class="chat-header-status">En ligne maintenant</div>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Messages aujourd'hui</span>
+      <span id="progressLabel">5 / 5</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:100%"></div>
+    </div>
+  </div>
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="msg bot">
+      <div class="msg-av">🦊</div>
+      <div class="bubble">Coucou ! 🌸 Je suis là pour t'écouter et t'accompagner. Dis-moi, comment tu vas aujourd'hui ?</div>
+    </div>
+  </div>
+  <div class="chat-footer">
+    <div id="inputArea" class="input-row">
+      <textarea class="chat-input" id="chatInput" placeholder="Écris ton message..." rows="1"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMsg()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+const PROXY = 'https://harmosia-proxy-stephaniedabonotpro-7919s-projects.vercel.app/api/proxy';
+const MAX = 5;
+
+function getState() {
+  const today = new Date().toDateString();
+  const s = JSON.parse(localStorage.getItem('hf_v2') || '{}');
+  if (s.date !== today) return { date: today, count: 0 };
+  return s;
+}
+function saveState(count) {
+  localStorage.setItem('hf_v2', JSON.stringify({ date: new Date().toDateString(), count }));
+}
+function updateProgress() {
+  const left = MAX - getState().count;
+  const pct = Math.max(0, (left / MAX) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = left + ' / ' + MAX;
+  if (left <= 1) {
+    document.getElementById('progressFill').style.background = 'var(--orange)';
+    document.getElementById('progressLabel').style.color = 'var(--orange)';
+  }
+}
+function appendMsg(text, type) {
+  const msgs = document.getElementById('chatMsgs');
+  const d = document.createElement('div');
+  d.className = 'msg ' + type;
+  d.innerHTML = type === 'bot'
+    ? '<div class="msg-av">🦊</div><div class="bubble">' + text + '</div>'
+    : '<div class="bubble">' + text + '</div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function showTyping() {
+  const msgs = document.getElementById('chatMsgs');
+  const d = document.createElement('div');
+  d.className = 'msg bot'; d.id = 'typing';
+  d.innerHTML = '<div class="msg-av">🦊</div><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+function showLimit() {
+  document.getElementById('inputArea').innerHTML = '<div class="limit-msg"><strong>Tu as utilisé tes 5 messages du jour 🌙</strong>Reviens demain gratuitement, ou accède à l'illimité avec le programme <a href="#">New Era →</a></div>';
+}
+
+async function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const state = getState();
+  if (state.count >= MAX) { showLimit(); return; }
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+  appendMsg(text, 'user');
+  const newCount = state.count + 1;
+  saveState(newCount);
+  updateProgress();
+  if (newCount >= MAX) showLimit();
+  showTyping();
+  try {
+    const res = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text, bot: 'free' })
+    });
+    const data = await res.json();
+    removeTyping();
+    appendMsg(data.reply || 'Oups, réessaie dans un instant !', 'bot');
+  } catch(e) {
+    removeTyping();
+    appendMsg("Oups, une petite erreur s'est glissée 🌿 Réessaie dans un instant !", 'bot');
+  }
+  if (newCount < MAX) document.getElementById('sendBtn').disabled = false;
+}
+
+const inp = document.getElementById('chatInput');
+inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } });
+inp.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 100) + 'px'; });
+updateProgress();
+</script>
+</body>
+</html>
