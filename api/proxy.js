@@ -2,12 +2,12 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { message, bot } = req.body;
-  if (!message || !bot) return res.status(400).json({ error: 'Paramètres manquants' });
+  let body = '';
+  for await (const chunk of req) { body += chunk; }
+  const { message, bot } = JSON.parse(body);
 
   const webhooks = {
     free: 'https://hook.eu1.make.com/9yzw2wiupwq9esowbeydim88x7508ptd',
