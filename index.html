@@ -217,7 +217,7 @@ async function sendMsg() {
     const res = await fetch(PROXY, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text, bot: 'free' })
+      body: JSON.stringify({ message: text })
     });
     const data = await res.json();
     removeTyping();
