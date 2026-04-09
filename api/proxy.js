@@ -2,20 +2,26 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).end();
+  res.setHeader('Access-Control-Max-Age', '86400');
 
-  let body = '';
-  for await (const chunk of req) { body += chunk; }
-  const { message, bot } = JSON.parse(body);
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  if (req.method !== 'POST') {
+    res.status(405).end();
+    return;
+  }
+
+  const { message, bot } = req.body || {};
 
   const webhooks = {
     free: 'https://hook.eu1.make.com/9yzw2wiupwq9esowbeydim88x7508ptd',
     premium: 'https://hook.eu1.make.com/8ya97qw8mp51855bl6igcnyysdmgm2o3'
   };
 
-  const url = webhooks[bot];
-  if (!url) return res.status(400).json({ error: 'Bot inconnu' });
+  const url = webhooks[bot] || webhooks.free;
 
   const response = await fetch(url, {
     method: 'POST',
@@ -30,5 +36,5 @@ export default async function handler(req, res) {
     reply = json.response || json.message || json.reply || json.text || text;
   } catch(e) {}
 
-  return res.status(200).json({ reply });
+  res.status(200).json({ reply });
 }
