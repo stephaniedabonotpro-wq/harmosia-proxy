@@ -183,7 +183,7 @@ function appendMsg(text, type) {
   const d = document.createElement('div');
   d.className = 'msg ' + type;
   d.innerHTML = type === 'bot'
-    ? '<div class="msg-av">🦊</div><div class="bubble">' + text + '</div>'
+    ? '<div class="msg-av">🦊</div><div class="bubble">' + text.replace(/\n/g, '<br>') + '</div>'
     : '<div class="bubble">' + text + '</div>';
   msgs.appendChild(d);
   msgs.scrollTop = msgs.scrollHeight;
