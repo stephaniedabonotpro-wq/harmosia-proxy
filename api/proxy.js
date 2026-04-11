@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { message, bot } = req.body || {};
+  const { message, bot, sessionId } = req.body || {};
 
   const webhooks = {
     free: 'https://hook.eu1.make.com/9yzw2wiupwq9esowbeydim88x7508ptd',
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message })
+    body: JSON.stringify({ message, sessionId })
   });
 
   const text = await response.text();
