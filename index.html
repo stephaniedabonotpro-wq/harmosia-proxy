@@ -97,10 +97,51 @@
   background: #FFE8F4;
   border-color: var(--pink);
 }
+    #age-gate {
+  position: fixed;
+  inset: 0;
+  background: #FFFBF7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 40px;
+  text-align: center;
+  gap: 20px;
+}
+.age-btn {
+  padding: 14px 28px;
+  border-radius: 40px;
+  border: none;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 100%;
+  max-width: 320px;
+}
+.age-btn-yes {
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  color: #fff;
+}
+.age-btn-no {
+  background: #fff;
+  border: 1.5px solid #f0dded;
+  color: var(--pink);
+}
   </style>
 </head>
 <body id="mainBody">
-
+<div id="age-gate">
+  <div style="font-size:48px">🦊</div>
+  <div style="font-family:'Fredoka One',cursive; font-size:24px; color:#D41574;">Bienvenue sur Harmonie</div>
+  <p style="color:#7a6070; font-size:15px; max-width:300px; line-height:1.6;">Avant de commencer, dis-nous ton âge 🧡</p>
+  <button class="age-btn age-btn-yes" onclick="ageYes()">J'ai 15 ans ou plus ✅</button>
+  <button class="age-btn age-btn-no" onclick="ageNo()">J'ai moins de 15 ans</button>
+</div>
+  
 <section class="left">
   <div class="logo"><span class="logo-emoji">🦊</span> Harmonie</div>
   <div class="left-main">
@@ -170,6 +211,21 @@
 <script>
 const PROXY = 'https://harmosia-proxy-stephaniedabonotpro-7919s-projects.vercel.app/api/proxy';
 const MAX = 5;
+  function ageYes() {
+  localStorage.setItem('hf_age', 'ok');
+  document.getElementById('age-gate').style.display = 'none';
+}
+function ageNo() {
+  document.getElementById('age-gate').innerHTML = `
+    <div style="font-size:48px">🧡</div>
+    <div style="font-family:'Fredoka One',cursive; font-size:22px; color:#D41574;">Un petit mot pour tes parents</div>
+    <p style="color:#7a6070; font-size:14px; max-width:320px; line-height:1.7;">Harmonie accueille les ados dès 13 ans 🦊 Pour les moins de 15 ans, nous avons besoin de l'accord d'un parent ou tuteur légal.<br><br>Si vous autorisez votre enfant à utiliser Harmonie, cliquez sur le bouton ci-dessous.</p>
+    <button class="age-btn age-btn-yes" onclick="ageYes()">J'autorise mon enfant à utiliser Harmonie ✅</button>
+  `;
+}
+if (localStorage.getItem('hf_age') === 'ok') {
+  document.getElementById('age-gate').style.display = 'none';
+}
   function getSessionId() {
   let id = localStorage.getItem('hf_session');
   if (!id) {
