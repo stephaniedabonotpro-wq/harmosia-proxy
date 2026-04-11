@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Harmonie — Ton espace pour aller mieux</title>
+  <title>Harmonie — Ta safe place</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <style>
@@ -80,6 +80,23 @@
     .limit-msg strong { display: block; font-weight: 700; margin-bottom: 4px; font-size: 14px; }
     .limit-msg a { color: var(--orange); font-weight: 500; text-decoration: none; }
     @media (max-width: 700px) { body { grid-template-columns: 1fr; } .left { display: none; } .right { height: 100vh; border-left: none; } }
+ .suggestion-btn {
+  background: #fff;
+  border: 1.5px solid #f0dded;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-family: "Inter", sans-serif;
+  color: #D41574;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s;
+  width: fit-content;
+}
+.suggestion-btn:hover {
+  background: #FFE8F4;
+  border-color: var(--pink);
+}
   </style>
 </head>
 <body id="mainBody">
@@ -131,7 +148,12 @@
   <div class="chat-msgs" id="chatMsgs">
     <div class="msg bot">
       <div class="msg-av">🦊</div>
-      <div class="bubble">Salut ! ☀️ Je suis ravie de te voir. Comment vas-tu ?</div>
+      <div class="bubble">Salut ! ☀️ Je suis ravie de te voir. Comment puis-je t'aider aujourd'hui ?</div>
+      <div id="suggestions" style="display:flex; flex-direction:column; gap:8px; margin-left:36px;">
+  <button class="suggestion-btn" onclick="pickSuggestion(this)">Je me sens pas bien en ce moment 😔</button>
+  <button class="suggestion-btn" onclick="pickSuggestion(this)">Je veux mieux me comprendre ✨</button>
+  <button class="suggestion-btn" onclick="pickSuggestion(this)">J'ai juste besoin de parler 💬</button>
+</div>
     </div>
   </div>
   <div class="chat-footer">
@@ -208,6 +230,13 @@ function removeTyping() { const t = document.getElementById('typing'); if (t) t.
 function showLimit() {
   document.getElementById('inputArea').innerHTML = '<div class="limit-msg"><strong>Tu as utilisé tes 5 messages du jour 💖</strong>Merci d\'avoir testé Harmonie ! Ton avis nous aide à l\'améliorer — ça prend 2 minutes 👉 <a href="https://tally.so/r/XxMEe4" target="_blank">Donner mon avis →</a><br><br><span style="font-size:12px;color:#c0a8b8;"></span></div>';
 }
+  function pickSuggestion(btn) {
+  const text = btn.innerText;
+  document.getElementById('suggestions').remove();
+  document.getElementById('chatInput').value = text;
+  sendMsg();
+}
+
 async function sendMsg() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
