@@ -147,6 +147,14 @@
 <script>
 const PROXY = 'https://harmosia-proxy-stephaniedabonotpro-7919s-projects.vercel.app/api/proxy';
 const MAX = 5;
+  function getSessionId() {
+  let id = localStorage.getItem('hf_session');
+  if (!id) {
+    id = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+    localStorage.setItem('hf_session', id);
+  }
+  return id;
+}
 let isFullscreen = false;
 
 function toggleFullscreen() {
@@ -218,7 +226,7 @@ async function sendMsg() {
     const res = await fetch(PROXY, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text, bot: 'free' })
+      body: JSON.stringify({ message: text, bot: 'free', sessionId: getSessionId() })
     });
     const data = await res.json();
     removeTyping();
