@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harmonie — New Era</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --pink:    #D41574;
+      --pink2:   #DC2265;
+      --orange:  #FF611B;
+      --amber:   #FFA93D;
+      --bg:      #FFFBF7;
+      --text:    #1a1018;
+      --muted:   #7a6070;
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: "Inter", sans-serif; }
+    body { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; transition: grid-template-columns 0.3s ease; }
+    body.fullscreen { grid-template-columns: 0fr 1fr; }
+    body.fullscreen .left { opacity: 0; pointer-events: none; overflow: hidden; padding: 0; }
+
+    /* EMAIL GATE */
+    #email-gate {
+      position: fixed;
+      inset: 0;
+      background: #0f0508;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      overflow: hidden;
+    }
+    .gate-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, #FF93C910 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 50%, #FFBF0008 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .gate-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      padding: 40px 24px;
+      width: 100%;
+      max-width: 440px;
+    }
+    .gate-cover-wrap {
+      width: 140px;
+      margin-bottom: 8px;
+    }
+    .gate-cover {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 16px 48px #00000060;
+    }
+    .gate-logo {
+      font-family: "Fredoka", cursive;
+      font-weight: 700;
+      font-size: 18px;
+      color: #FF93C9;
+    }
+    .gate-title {
+      font-family: "Fredoka", cursive;
+      font-weight: 700;
+      font-size: 32px;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .gate-title span {
+      background: linear-gradient(135deg, #D41574, #FF611B);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gate-desc {
+      color: #9a7080;
+      font-size: 14px;
+      max-width: 280px;
+      line-height: 1.7;
+    }
+    #email-gate input {
+      width: 100%;
+      max-width: 320px;
+      padding: 13px 18px;
+      border: 1.5px solid #3d1528;
+      border-radius: 40px;
+      font-family: "Inter", sans-serif;
+      font-size: 15px;
+      outline: none;
+      background: #1a0a10;
+      color: #fff;
+      transition: border-color 0.2s;
+    }
+    #email-gate input:focus { border-color: #D41574; }
+    #email-gate input::placeholder { color: #604050; }
+    #email-gate button {
+      width: 100%;
+      max-width: 320px;
+      padding: 14px 28px;
+      border-radius: 40px;
+      border: none;
+      font-family: "Inter", sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      background: linear-gradient(135deg, #D41574, #FF611B);
+      color: #fff;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 8px 32px #D4157440;
+    }
+    #email-gate button:hover { opacity: 0.88; transform: translateY(-1px); }
+    #email-gate button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    #email-error {
+      font-size: 13px;
+      color: #FFA93D;
+      display: none;
+      max-width: 300px;
+    }
+    .gate-note {
+      font-size: 12px;
+      color: #604050;
+    }
+    .gate-note a { color: #FF93C9; text-decoration: none; }
+
+    /* LEFT PANEL */
+    .left { padding: 48px 40px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; transition: opacity 0.3s ease, padding 0.3s ease; background: #1a0a10; }
+    .left::before { content: ""; position: absolute; top: -80px; left: -80px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, #FF93C915 0%, transparent 70%); pointer-events: none; }
+    .left::after { content: ""; position: absolute; bottom: -60px; right: -40px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, #FFBF0012 0%, transparent 70%); pointer-events: none; }
+    .logo { font-family: "Fredoka", cursive; font-weight: 700; font-size: 24px; background: linear-gradient(90deg, var(--pink), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: flex; align-items: center; gap: 8px; }
+    .logo-emoji { font-size: 22px; -webkit-text-fill-color: initial; }
+    .left-main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 40px 0; }
+    .tag { display: inline-flex; align-items: center; gap: 6px; background: #FF93C920; color: #FF93C9; font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 40px; width: fit-content; margin-bottom: 20px; border: 1px solid #FF93C930; }
+    .tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #FF93C9; }
+    h1 { font-family: "Fredoka", cursive; font-weight: 700; font-size: clamp(28px, 3vw, 42px); line-height: 1.2; color: #fff; margin-bottom: 16px; }
+    h1 span { background: linear-gradient(90deg, var(--pink), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .desc { font-size: 15px; line-height: 1.7; color: #c090a0; max-width: 340px; margin-bottom: 32px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill { background: #ffffff10; border: 1.5px solid #ffffff20; border-radius: 40px; padding: 7px 14px; font-size: 13px; color: #c090a0; }
+    .left-footer { font-size: 12px; color: #604050; line-height: 1.6; }
+    .left-footer a { color: #FF93C9; text-decoration: none; }
+
+    /* RIGHT PANEL */
+    .right { background: #fff; border-left: 1px solid #f0e6ee; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
+    .chat-header { padding: 16px 20px; border-bottom: 1px solid #f5eaf2; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .chat-avatar { width: 42px; height: 42px; border-radius: 50%; background: #fff5fb; border: 2px solid #f0d0e8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 22px; line-height: 1; }
+    .chat-header-info { flex: 1; }
+    .chat-header-name { font-family: "Fredoka", cursive; font-weight: 700; font-size: 16px; color: #FE8841; }
+    .chat-header-status { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+    .chat-header-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #3bba6e; }
+    .toggle-btn { width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid #f0dded; background: #fdf8fc; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+    .toggle-btn:hover { background: #ffe8f4; border-color: var(--pink); }
+    .toggle-btn svg { width: 16px; height: 16px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.2s; }
+    body.fullscreen .toggle-btn svg { stroke: var(--pink); }
+
+    /* CHAT */
+    .chat-msgs { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
+    .chat-msgs::-webkit-scrollbar { width: 3px; }
+    .chat-msgs::-webkit-scrollbar-thumb { background: #f0d0e8; border-radius: 2px; }
+    .msg { display: flex; gap: 8px; align-items: flex-end; max-width: 82%; }
+    .msg.user { flex-direction: row-reverse; margin-left: auto; }
+    .msg-av { width: 28px; height: 28px; border-radius: 50%; background: #fff5fb; border: 1.5px solid #f0d0e8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; line-height: 1; }
+    .bubble { padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.55; max-width: 100%; word-break: break-word; }
+    .msg.bot .bubble { background: #FFD085; border: 1px solid #f5c060; color: var(--text); border-bottom-left-radius: 4px; }
+    .msg.user .bubble { background: linear-gradient(135deg, var(--pink), var(--pink2)); color: #fff; border-bottom-right-radius: 4px; }
+    .typing { display: flex; gap: 4px; align-items: center; padding: 10px 14px; background: #FFD085; border: 1px solid #f5c060; border-radius: 16px; border-bottom-left-radius: 4px; width: fit-content; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #c08020; animation: pulse 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulse { 0%,60%,100%{opacity:0.3;transform:scale(1)} 30%{opacity:1;transform:scale(1.2)} }
+    .chat-footer { padding: 12px 20px 16px; border-top: 1px solid #f5eaf2; flex-shrink: 0; }
+    .input-row { display: flex; gap: 8px; align-items: flex-end; }
+    .chat-input { flex: 1; border: 1.5px solid #f0dded; border-radius: 22px; padding: 10px 16px; font-size: 14px; font-family: "Inter", sans-serif; resize: none; outline: none; background: #fdf8fc; color: var(--text); line-height: 1.4; max-height: 100px; transition: border-color 0.2s; }
+    .chat-input:focus { border-color: var(--pink); background: #fff; }
+    .chat-input::placeholder { color: #c0a8b8; }
+    .send-btn { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--orange)); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.2s, transform 0.1s; }
+    .send-btn:hover { opacity: 0.88; }
+    .send-btn:active { transform: scale(0.93); }
+    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .send-btn svg { width: 17px; height: 17px; fill: #fff; }
+    .suggestion-btn { background: #fff; border: 1.5px solid #f0dded; border-radius: 20px; padding: 8px 16px; font-size: 13px; font-family: "Inter", sans-serif; color: #D41574; cursor: pointer; text-align: left; transition: background 0.2s, border-color 0.2s; width: fit-content; }
+    .suggestion-btn:hover { background: #FFE8F4; border-color: var(--pink); }
+    @media (max-width: 700px) { body { grid-template-columns: 1fr; } .left { display: none; } .right { height: 100vh; border-left: none; } }
+  </style>
+</head>
+<body id="mainBody">
+
+<!-- EMAIL GATE -->
+<div id="email-gate">
+  <div class="gate-bg"></div>
+  <div class="gate-content">
+    <div class="gate-cover-wrap">
+      <img src="New_Era_-_Le_challenge_pour_prendre_un_nouveau_départ.png" alt="New Era" class="gate-cover" onerror="this.style.display='none'" />
+    </div>
+    <div class="gate-logo">Harmosia 🦊</div>
+    <h2 class="gate-title">Bienvenue dans ta<br><span>New Era</span></h2>
+    <p class="gate-desc">Entre l'adresse email utilisée lors de ton achat pour accéder à Harmonie.</p>
+    <input type="email" id="emailInput" placeholder="ton@email.com" />
+    <div id="email-error">❌ Cet email n'est pas reconnu. Vérifie l'adresse utilisée lors de l'achat.</div>
+    <button id="emailBtn" onclick="checkEmail()">Accéder à Harmonie ✨</button>
+    <p class="gate-note">Un problème ? <a href="mailto:harmosia.contact@gmail.com">harmosia.contact@gmail.com</a></p>
+  </div>
+</div>
+
+<section class="left">
+  <div class="logo"><span class="logo-emoji">🦊</span> Harmonie</div>
+  <div class="left-main">
+    <div class="tag">New Era — Programme 21 jours ✨</div>
+    <h1>Ta <span>nouvelle ère</span> commence maintenant</h1>
+    <p class="desc">Je suis Harmonie, ton IA bienveillante 🧡 Je t'accompagne tout au long de ton challenge New Era, à ton rythme, sans jugement.</p>
+    <div class="pills">
+      <span class="pill">📖 Programme 21 jours</span>
+      <span class="pill">🌿 Sans jugement</span>
+      <span class="pill">💛 À ton rythme</span>
+    </div>
+  </div>
+  <div class="left-footer">
+    Harmonie est une IA bienveillante, pas un professionnel de santé.<br />
+    En cas d'urgence, contacte le <strong>3114</strong>.<br />
+    <a href="https://www.harmosia-academy.fr/mentions-legales" target="_blank">Mentions légales</a> · <a href="https://www.harmosia-academy.fr/politique-de-confidentialite" target="_blank">Politique de confidentialité</a>
+  </div>
+</section>
+
+<section class="right">
+  <div class="chat-header">
+    <div class="chat-avatar">🦊</div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">Harmonie</div>
+      <div class="chat-header-status">En ligne maintenant</div>
+    </div>
+    <button class="toggle-btn" onclick="toggleFullscreen()" title="Plein écran">
+      <svg id="toggleIcon" viewBox="0 0 24 24">
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <polyline points="9 21 3 21 3 15"></polyline>
+        <line x1="21" y1="3" x2="14" y2="10"></line>
+        <line x1="3" y1="21" x2="10" y2="14"></line>
+      </svg>
+    </button>
+  </div>
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="msg bot" style="align-items: flex-start;">
+      <div class="msg-av">🦊</div>
+      <div class="bubble">Salut ✨ Je suis tellement contente de te retrouver ici ! Tu as fait le premier pas en te lançant dans la New Era 💛 Comment tu te sens aujourd'hui ?</div>
+    </div>
+    <div id="suggestions-wrapper" style="display:flex; flex-direction:column; gap:8px; padding-left:36px; align-items:flex-start; width:100%;">
+      <button class="suggestion-btn" onclick="pickSuggestion(this)">Je viens de commencer le challenge 🌱</button>
+      <button class="suggestion-btn" onclick="pickSuggestion(this)">Je suis déjà en cours de programme 📖</button>
+    </div>
+  </div>
+  <div class="chat-footer">
+    <div id="inputArea" class="input-row">
+      <textarea class="chat-input" id="chatInput" placeholder="Écris ton message..." rows="1"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMsg()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+const PROXY = 'https://harmosia-proxy-stephaniedabonotpro-7919s-projects.vercel.app/api/proxy';
+
+// EMAIL GATE
+async function checkEmail() {
+  const email = document.getElementById('emailInput').value.trim().toLowerCase();
+  const btn = document.getElementById('emailBtn');
+  const err = document.getElementById('email-error');
+  if (!email || !email.includes('@')) {
+    err.style.display = 'block';
+    err.textContent = '❌ Entre une adresse email valide.';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Vérification…';
+  err.style.display = 'none';
+  try {
+    const res = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'check_email', email })
+    });
+    const data = await res.json();
+    if (data.authorized) {
+      localStorage.setItem('ne_email', email);
+      document.getElementById('email-gate').style.display = 'none';
+    } else {
+      err.style.display = 'block';
+      err.textContent = '❌ Cet email n\'est pas reconnu. Vérifie l\'adresse utilisée lors de l\'achat.';
+      btn.disabled = false;
+      btn.textContent = 'Accéder à Harmonie →';
+    }
+  } catch(e) {
+    err.style.display = 'block';
+    err.textContent = '❌ Une erreur s\'est produite. Réessaie dans un instant.';
+    btn.disabled = false;
+    btn.textContent = 'Accéder à Harmonie →';
+  }
+}
+
+// Vérification au chargement
+if (localStorage.getItem('ne_email')) {
+  document.getElementById('email-gate').style.display = 'none';
+}
+
+// Entrée email avec Enter
+document.getElementById('emailInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') checkEmail();
+});
+
+function getSessionId() {
+  let id = localStorage.getItem('ne_session');
+  if (!id) {
+    id = 'ne_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+    localStorage.setItem('ne_session', id);
+  }
+  return id;
+}
+
+let isFullscreen = false;
+function toggleFullscreen() {
+  isFullscreen = !isFullscreen;
+  document.getElementById('mainBody').classList.toggle('fullscreen', isFullscreen);
+  const icon = document.getElementById('toggleIcon');
+  if (isFullscreen) {
+    icon.innerHTML = '<polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="10" y1="14" x2="3" y2="21"></line><line x1="21" y1="3" x2="14" y2="10"></line>';
+  } else {
+    icon.innerHTML = '<polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line>';
+  }
+}
+
+function appendMsg(text, type) {
+  const msgs = document.getElementById('chatMsgs');
+  const d = document.createElement('div');
+  d.className = 'msg ' + type;
+  d.innerHTML = type === 'bot'
+    ? '<div class="msg-av">🦊</div><div class="bubble">' + text.replace(/\n/g, '<br>') + '</div>'
+    : '<div class="bubble">' + text + '</div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function showTyping() {
+  const msgs = document.getElementById('chatMsgs');
+  const d = document.createElement('div');
+  d.className = 'msg bot'; d.id = 'typing';
+  d.innerHTML = '<div class="msg-av">🦊</div><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+
+function pickSuggestion(btn) {
+  const text = btn.innerText;
+  document.getElementById('suggestions-wrapper').remove();
+  document.getElementById('chatInput').value = text;
+  sendMsg();
+}
+
+async function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+  appendMsg(text, 'user');
+  showTyping();
+  try {
+    const res = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text, bot: 'newera', sessionId: getSessionId() })
+    });
+    const data = await res.json();
+    removeTyping();
+    appendMsg(data.reply || 'Oups, réessaie dans un instant !', 'bot');
+  } catch(e) {
+    removeTyping();
+    appendMsg("Oups, une petite erreur s'est glissée 🫣 Réessaie dans un instant !", 'bot');
+  }
+  document.getElementById('sendBtn').disabled = false;
+}
+
+const inp = document.getElementById('chatInput');
+inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } });
+inp.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 100) + 'px'; });
+</script>
+</body>
+</html>
