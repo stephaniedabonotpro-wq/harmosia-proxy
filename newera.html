@@ -335,13 +335,17 @@ function toggleFullscreen() {
     icon.innerHTML = '<polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line>';
   }
 }
-
+function formatMsg(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
 function appendMsg(text, type) {
   const msgs = document.getElementById('chatMsgs');
   const d = document.createElement('div');
   d.className = 'msg ' + type;
   d.innerHTML = type === 'bot'
-    ? '<div class="msg-av">🦊</div><div class="bubble">' + text.replace(/\n/g, '<br>') + '</div>'
+    ? '<div class="msg-av">🦊</div><div class="bubble">' + formatMsg(text) + '</div>'
     : '<div class="bubble">' + text + '</div>';
   msgs.appendChild(d);
   msgs.scrollTop = msgs.scrollHeight;
