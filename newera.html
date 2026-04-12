@@ -268,7 +268,6 @@
 <script>
 const PROXY = 'https://harmosia-proxy-stephaniedabonotpro-7919s-projects.vercel.app/api/proxy';
 
-// EMAIL GATE
 async function checkEmail() {
   const email = document.getElementById('emailInput').value.trim().toLowerCase();
   const btn = document.getElementById('emailBtn');
@@ -295,22 +294,20 @@ async function checkEmail() {
       err.style.display = 'block';
       err.textContent = '❌ Cet email n\'est pas reconnu. Vérifie l\'adresse utilisée lors de l\'achat.';
       btn.disabled = false;
-      btn.textContent = 'Accéder à Harmonie →';
+      btn.textContent = 'Accéder à Harmonie ✨';
     }
   } catch(e) {
     err.style.display = 'block';
     err.textContent = '❌ Une erreur s\'est produite. Réessaie dans un instant.';
     btn.disabled = false;
-    btn.textContent = 'Accéder à Harmonie →';
+    btn.textContent = 'Accéder à Harmonie ✨';
   }
 }
 
-// Vérification au chargement
 if (localStorage.getItem('ne_email')) {
   document.getElementById('email-gate').style.display = 'none';
 }
 
-// Entrée email avec Enter
 document.getElementById('emailInput').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') checkEmail();
 });
@@ -334,13 +331,15 @@ function toggleFullscreen() {
   } else {
     icon.innerHTML = '<polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line>';
   }
-  }
+}
+
 function formatMsg(text) {
   return text
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/—/g, ' ')
     .replace(/\n/g, '<br>');
 }
+
 function appendMsg(text, type) {
   const msgs = document.getElementById('chatMsgs');
   const d = document.createElement('div');
@@ -351,6 +350,7 @@ function appendMsg(text, type) {
   msgs.appendChild(d);
   msgs.scrollTop = msgs.scrollHeight;
 }
+
 function showTyping() {
   const msgs = document.getElementById('chatMsgs');
   const d = document.createElement('div');
@@ -359,6 +359,7 @@ function showTyping() {
   msgs.appendChild(d);
   msgs.scrollTop = msgs.scrollHeight;
 }
+
 function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
 
 function pickSuggestion(btn) {
