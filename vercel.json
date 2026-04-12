@@ -8,5 +8,9 @@
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
       ]
     }
+  ],
+  "rewrites": [
+    { "source": "/newera", "destination": "/newera.html" },
+    { "source": "/", "destination": "/index.html" }
   ]
 }
